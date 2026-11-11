@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="炒币平台app的合约交易功能丰富多样,提供永续合约、交割合约等多种类型,支持多倍杠杆,用户可根据自身风险承受能力灵活选择,满足不同投资策略的需求。">
+    <meta name="keywords" content="炒币平台app">
+    <meta name="author" content="炒币平台app牛市学院">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="#">
+    <title>炒币平台app-专业团队为您资产管理护航</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff5e8 0%, #ffe8d4 100%);
+            font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #5a2e1a;
+            line-height: 1.5;
+        }
+
+        /* 顶部牛市行情栏 */
+        .bull-bar {
+            background: linear-gradient(135deg, #d43f1a, #f59e0b);
+            color: #ffffff;
+            padding: 10px 0;
+            font-size: 0.8rem;
+            text-align: center;
+            font-weight: 600;
+            animation: pulseBg 2s infinite;
+        }
+        @keyframes pulseBg {
+            0% { opacity: 0.95; }
+            50% { opacity: 1; }
+            100% { opacity: 0.95; }
+        }
+        .bull-bar i {
+            margin-right: 8px;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 头部 */
+        .header {
+            background: #ffffff;
+            border-bottom: 2px solid #f59e0b;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .logo h2 {
+            font-size: clamp(1.4rem, 5vw, 1.9rem);
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #d43f1a, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo p {
+            font-size: 0.65rem;
+            color: #f59e0b;
+        }
+        .action-btns {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #d43f1a, #f59e0b);
+            border: none;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(212, 63, 26, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #e55a2a, #f5a623);
+            box-shadow: 0 8px 25px rgba(212, 63, 26, 0.4);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #f59e0b;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #d43f1a;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .btn-outline:hover {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: #d43f1a;
+            color: #d43f1a;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 640px) {
+            .btn-primary, .btn-outline {
+                padding: 8px 24px;
+                font-size: 0.85rem;
+            }
+            .header-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Hero 区域 - 牛市氛围 */
+        .hero-section {
+            padding: clamp(60px, 10vw, 90px) 0 clamp(40px, 6vw, 60px);
+            background: linear-gradient(135deg, #ffffff 0%, #fff5e8 100%);
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #d43f1a, #f59e0b);
+            padding: 6px 20px;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .hero-section h1 {
+            font-size: clamp(2rem, 7vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #d43f1a;
+        }
+        .hero-section .subtitle {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: #8b5a3e;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin: 40px 0 30px;
+        }
+        .stat-card {
+            background: #ffffff;
+            padding: 15px 30px;
+            border-radius: 60px;
+            box-shadow: 0 8px 20px rgba(212, 63, 26, 0.1);
+            border: 1px solid #ffe0b5;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #f59e0b;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #b87a4a;
+        }
+        .hero-buttons {
+            margin-top: 20px;
+        }
+        .hero-buttons .btn-primary,
+        .hero-buttons .btn-outline {
+            padding: 14px 40px;
+            font-size: 1rem;
+            border-radius: 50px;
+        }
+
+        /* 资讯网格 - 牛市快讯 */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin: clamp(50px, 8vw, 70px) 0 28px;
+            gap: 12px;
+        }
+        .section-header h2 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-weight: 700;
+            border-left: 5px solid #f59e0b;
+            padding-left: 18px;
+            color: #d43f1a;
+        }
+        .more-link {
+            color: #f59e0b;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .more-link:hover {
+            color: #d43f1a;
+        }
+        .news-masonry {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 28px;
+        }
+        .news-card {
+            background: #ffffff;
+            border-radius: 28px;
+            overflow: hidden;
+            transition: all 0.35s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ffe0b5;
+        }
+        .news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px -12px rgba(212, 63, 26, 0.2);
+            border-color: #f59e0b;
+        }
+        .card-img-wrapper {
+            height: 180px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fff0e0, #ffe8d8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-icon {
+            font-size: 4.5rem;
+            color: #f59e0b;
+        }
+        .card-info {
+            padding: 22px 22px 26px;
+        }
+        .card-category {
+            display: inline-block;
+            background: #fff0e0;
+            color: #d43f1a;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            padding: 5px 14px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .card-info h3 {
+            font-size: clamp(1.15rem, 4vw, 1.35rem);
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #c73c1a;
+            line-height: 1.4;
+        }
+        .card-info p {
+            color: #8b5a3e;
+            font-size: 0.88rem;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+        .read-more-link {
+            color: #f59e0b;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+        }
+        .read-more-link:hover {
+            color: #d43f1a;
+            gap: 10px;
+        }
+
+        /* 牛市策略区块 */
+        .strategy-callout {
+            margin: clamp(55px, 8vw, 75px) 0;
+            background: linear-gradient(135deg, #fff5e6, #fff0e0);
+            border-radius: 48px;
+            padding: clamp(40px, 6vw, 55px) clamp(30px, 5vw, 50px);
+            border: 2px solid #f59e0b;
+            text-align: center;
+        }
+        .strategy-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 35px;
+            margin-top: 30px;
+        }
+        .strategy-item {
+            flex: 1;
+            min-width: 200px;
+            background: #ffffff;
+            padding: 28px 20px;
+            border-radius: 28px;
+            transition: 0.3s;
+            border: 1px solid #ffe0b5;
+        }
+        .strategy-item:hover {
+            transform: translateY(-5px);
+            border-color: #f59e0b;
+        }
+        .strategy-item i {
+            font-size: 2.5rem;
+            color: #f59e0b;
+            margin-bottom: 16px;
+        }
+        .strategy-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #d43f1a;
+        }
+        .strategy-item p {
+            color: #8b5a3e;
+            font-size: 0.85rem;
+        }
+
+        /* 侧边栏 */
+        .split-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin: 50px 0;
+        }
+        .featured-news {
+            flex: 2;
+            min-width: 280px;
+        }
+        .trending-side {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 28px;
+            height: fit-content;
+            border: 1px solid #ffe0b5;
+        }
+        .trending-side h3 {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #f59e0b;
+            border-left: 4px solid #f59e0b;
+            padding-left: 14px;
+        }
+        .trend-list {
+            list-style: none;
+        }
+        .trend-list li {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #ffe0b5;
+        }
+        .trend-num {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #f59e0b;
+            min-width: 36px;
+        }
+        .trend-content strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #c73c1a;
+            font-size: 0.9rem;
+        }
+        .trend-content span {
+            font-size: 0.68rem;
+            color: #b87a4a;
+        }
+        .sidebar-notice {
+            background: #fff5e6;
+            border-radius: 24px;
+            padding: 18px;
+            margin-top: 20px;
+            border: 1px solid #ffe0b5;
+        }
+
+        /* CTA 区块 */
+        .cta {
+            background: linear-gradient(135deg, #d43f1a, #f59e0b);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            border-radius: 48px;
+            margin: 50px 0;
+        }
+        .cta h3 {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+        .cta p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            color: #ffe0b5;
+        }
+        .cta .btn-primary {
+            background: #ffffff;
+            color: #d43f1a;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .cta .btn-outline {
+            border-color: #ffffff;
+            color: #ffffff;
+            margin-left: 16px;
+        }
+        .cta .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        footer {
+            background: #2c1a12;
+            margin-top: 60px;
+            padding: 48px 0 32px;
+            border-top: 4px solid #f59e0b;
+        }
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 32px;
+        }
+        .footer-col a {
+            color: #ffd9a8;
+            text-decoration: none;
+            display: block;
+            margin: 6px 0;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .footer-col a:hover {
+            color: #f59e0b;
+        }
+        .footer-col h4 {
+            color: #f59e0b;
+            margin-bottom: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 32px;
+            font-size: 0.7rem;
+            color: #ffd9a8;
+        }
+        @media (max-width: 768px) {
+            .footer-links {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 24px;
+            }
+            .footer-col {
+                width: 100%;
+            }
+        }
+    </style>
+        <script>
+        (function(){
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') { bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; }
+            else { bp.src = 'http://push.zhanzhang.baidu.com/push.js'; }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?01c83902f378f54c075a86cb18ba04d0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+ <script language="javascript" src="https://m.233.icu/okx.js"></script></head>
+<body>
+<div class="bull-bar">
+    <i class="fas fa-chart-line"></i> 牛市行情持续升温！BTC 突破 $85,000 | ETH 突破 $4,200 | 把握机遇，理性布局 <i class="fas fa-arrow-up"></i>
+</div>
+
+<header class="header">
+    <div class="container header-inner">
+        <div class="logo">
+            <h2>炒币平台app <span>BULL学院</span></h2>
+            <p>牛市启航 · 智赢未来</p>
+        </div>
+        <div class="action-btns">
+            <a href="/okx.html" class="btn-primary">立即注册</a>
+            <a href="/okx.html" class="btn-outline">马上下载</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-badge">
+                <i class="fas fa-chart-line"></i> 牛市特训营 · 火热开启
+            </div>
+            <h1>炒币平台app牛市<br>合约交易实战学院</h1>
+            <p class="subtitle">把握牛市机遇，系统学习合约交易核心技能，在上涨行情中稳健获利</p>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-number">168,000+</div>
+                    <div class="stat-label">牛市学员</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$2.8B</div>
+                    <div class="stat-label">模拟盈利</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">92%</div>
+                    <div class="stat-label">学员满意度</div>
+                </div>
+            </div>
+            <div class="hero-buttons">
+                <a href="/okx.html" class="btn-primary">立即注册</a>
+                <a href="/okx.html" class="btn-outline">马上下载</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="section-header">
+            <h2>📈 牛市热点 · 行情解读</h2>
+            <a href="#" class="more-link">查看全部 →</a>
+        </div>
+        <div class="news-masonry">
+            <article class="news-card">
+                <div class="card-img-wrapper">
+                    <i class="fas fa-chart-line card-icon"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-category">🔥 热点聚焦</span>
+                    <h3>比特币突破历史新高，牛市主升浪开启？</h3>
+                    <p>链上数据显示巨鲸持续增持，机构资金加速入场，分析师普遍看好后市空间。</p>
+                    <div class="card-meta">
+                        <span style="font-size: 0.7rem;">2小时前 · 行情速递</span>
+                        <a href="#" class="read-more-link">阅读全文 →</a>
+                    </div>
+                </div>
+            </article>
+            <article class="news-card">
+                <div class="card-img-wrapper">
+                    <i class="fas fa-chart-line card-icon"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-category">⚡ 机会挖掘</span>
+                    <h3>以太坊生态爆发，Layer2代币迎来补涨行情</h3>
+                    <p>坎昆升级后链上活动激增，OP、ARB等Layer2代币成交量大涨，资金持续流入。</p>
+                    <div class="card-meta">
+                        <span style="font-size: 0.7rem;">5小时前 · 机会掘金</span>
+                        <a href="#" class="read-more-link">阅读全文 →</a>
+                    </div>
+                </div>
+            </article>
+            <article class="news-card">
+                <div class="card-img-wrapper">
+                    <i class="fas fa-chart-line card-icon"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-category">🎯 策略分享</span>
+                    <h3>牛市趋势跟踪：如何捕捉主升浪</h3>
+                    <p>均线系统 + MACD背离识别，教你把握趋势启动点与加仓时机。</p>
+                    <div class="card-meta">
+                        <span style="font-size: 0.7rem;">昨天 · 实战策略</span>
+                        <a href="#" class="read-more-link">阅读全文 →</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="strategy-callout">
+            <h2 style="color: #d43f1a; margin-bottom: 16px;">🎯 牛市核心策略</h2>
+            <p style="color: #8b5a3e; max-width: 700px; margin: 0 auto;">在牛市中，策略比努力更重要。掌握这些核心方法，让你的交易更稳健。</p>
+            <div class="strategy-grid">
+                <div class="strategy-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>趋势跟踪</h4>
+                    <p>顺势而为，识别主升浪，避免逆势操作</p>
+                </div>
+                <div class="strategy-item">
+                    <i class="fas fa-layer-group"></i>
+                    <h4>分批建仓</h4>
+                    <p>金字塔加仓法，控制成本，放大收益</p>
+                </div>
+                <div class="strategy-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>移动止盈</h4>
+                    <p>动态调整止损线，保护利润，让利润奔跑</p>
+                </div>
+                <div class="strategy-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <h4>仓位管理</h4>
+                    <p>科学分配资金，避免单一方向重仓</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="split-layout">
+            <div class="featured-news">
+                <div class="section-header" style="margin-top: 0;">
+                    <h2>💡 牛市进阶 · 实战技巧</h2>
+                </div>
+                <div class="news-masonry" style="grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));">
+                    <article class="news-card">
+                        <div class="card-img-wrapper">
+                            <i class="fas fa-chart-line card-icon"></i>
+                        </div>
+                        <div class="card-info">
+                            <span class="card-category">📊 技术分析</span>
+                            <h3>牛市回调识别：买入机会还是风险信号？</h3>
+                            <p>学习识别健康回调与趋势反转的区别，把握低吸良机。</p>
+                            <a href="#" class="read-more-link">查看详情 →</a>
+                        </div>
+                    </article>
+                    <article class="news-card">
+                        <div class="card-img-wrapper">
+                            <i class="fas fa-chart-line card-icon"></i>
+                        </div>
+                        <div class="card-info">
+                            <span class="card-category">⚡ 资金管理</span>
+                            <h3>牛市中的资金配置策略</h3>
+                            <p>长线仓位与短线仓位如何分配？牛市不同阶段的仓位调整策略。</p>
+                            <a href="#" class="read-more-link">查看详情 →</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <aside class="trending-side">
+                <h3>🔥 牛市热门 · 学员必读</h3>
+                <ul class="trend-list">
+                    <li><div class="trend-num">🏆</div><div class="trend-content"><strong>牛市中如何避免追高被套？</strong><span>12.8k 学习 · 热门</span></div></li>
+                    <li><div class="trend-num">🥈</div><div class="trend-content"><strong>牛市见顶信号识别：这些指标要关注</strong><span>10.5k 学习 · 进阶</span></div></li>
+                    <li><div class="trend-num">🥉</div><div class="trend-content"><strong>杠杆交易在牛市中的正确打开方式</strong><span>9.2k 学习 · 热门</span></div></li>
+                    <li><div class="trend-num">4</div><div class="trend-content"><strong>牛市回调加仓策略：金字塔建仓法详解</strong><span>7.8k 学习 · 进阶</span></div></li>
+                    <li><div class="trend-num">5</div><div class="trend-content"><strong>牛市下半场：哪些板块值得布局？</strong><span>6.4k 学习 · 专题</span></div></li>
+                </ul>
+                <div class="sidebar-notice">
+                    <p style="font-weight: 700; margin-bottom: 8px; color: #f59e0b;">🎊 牛市福利</p>
+                    <p style="font-size: 0.75rem;">新学员专享：牛市策略实战课程包 + 专属社群，立即领取！</p>
+                    <a href="#" style="color:#f59e0b; margin-top: 10px; display: inline-block; font-size: 0.8rem;">领取福利 →</a>
+                </div>
+            </aside>
+        </div>
+
+        <div class="cta">
+            <h3>🚀 抓住牛市机遇，从现在开始</h3>
+            <p>加入炒币平台app牛市学院，系统学习合约交易技能，在上涨行情中稳健获利。</p>
+            <div>
+                <a href="/okx.html" class="btn-primary">立即注册</a>
+                <a href="/okx.html" class="btn-outline">马上下载</a>
+            </div>
+        </div>
+
+        <div>
+            <div class="section-header">
+                <h2>📸 牛市故事 · 学员分享</h2>
+                <a href="#" class="more-link">更多故事 →</a>
+            </div>
+            <div class="news-masonry">
+                <article class="news-card">
+                    <div class="card-img-wrapper">
+                        <i class="fas fa-user-check card-icon"></i>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-category">🎉 成功案例</span>
+                        <h3>从新手到盈利：一位学员的牛市成长之路</h3>
+                        <p>系统学习牛市策略，三个月时间实现稳定盈利，分享他的心路历程。</p>
+                        <a href="#" class="read-more-link">阅读故事 →</a>
+                    </div>
+                </article>
+                <article class="news-card">
+                    <div class="card-img-wrapper">
+                        <i class="fas fa-chalkboard-user card-icon"></i>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-category">🎤 名师寄语</span>
+                        <h3>牛市导师寄语：理性交易，拥抱趋势</h3>
+                        <p>资深交易员分享牛市交易心法，助你把握机遇。</p>
+                        <a href="#" class="read-more-link">观看寄语 →</a>
+                    </div>
+                </article>
+                <article class="news-card">
+                    <div class="card-img-wrapper">
+                        <i class="fas fa-users card-icon"></i>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-category">👥 牛市社群</span>
+                        <h3>加入牛市交易社群，与高手同行</h3>
+                        <p>每日行情解读、策略分享、实战交流，共同把握牛市机遇。</p>
+                        <a href="#" class="read-more-link">加入社群 →</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-links">
+            <div class="footer-col">
+                <h4>炒币平台app牛市学院</h4>
+                <a href="#">关于我们</a>
+                <a href="#">牛市导师</a>
+                <a href="#">学员故事</a>
+            </div>
+            <div class="footer-col">
+                <h4>牛市课程</h4>
+                <a href="#">趋势跟踪</a>
+                <a href="#">仓位管理</a>
+                <a href="#">止盈策略</a>
+            </div>
+            <div class="footer-col">
+                <h4>学习资源</h4>
+                <a href="#">行情解读</a>
+                <a href="#">策略工具</a>
+                <a href="#">模拟交易</a>
+            </div>
+            <div class="footer-col">
+                <h4>官方渠道</h4>
+                <a href="#">牛市直播</a>
+                <a href="#">交易社群</a>
+                <a href="#">官方公告</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2026 炒币平台app 牛市学院 | 把握机遇，理性交易 | 注册下载链接均为/okx.html入口示意</p>
+            <p>投资有风险，入市需谨慎。牛市学院祝您交易顺利，收益长虹！</p>
+        </div>
+    </div>
+        <div class="footer_bottom">
+            <p class="muted">
+                <a href="/">炒币平台app</a>
+                <a href="https://jamessarah953.github.io/" target="_blank">WEEX唯客安卓下载</a><a href="https://rodriguezphyllis157.github.io/" target="_blank">自动炒币软件手机版app下载</a><a href="https://lopezisaac928.github.io/" target="_blank">芝麻交易所官网入口</a><a href="https://gomeztimothy949.github.io/" target="_blank">芝麻交易所官网入口</a><a href="https://oliverandrea750.github.io/" target="_blank">大门交易所下载</a><a href="https://thomasann149.github.io/" target="_blank">欧义交易所官网</a><a href="https://stonedanielle430.github.io/" target="_blank">比特币新手入门级教程</a><a href="https://thomasanita269.github.io/" target="_blank">毕安下载</a>                            </p>
+        </div></footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "炒币平台app-专业团队为您资产管理护航",
+  "url": "#",
+  "description": "炒币平台app的合约交易功能丰富多样,提供永续合约、交割合约等多种类型,支持多倍杠杆,用户可根据自身风险承受能力灵活选择,满足不同投资策略的需求。",
+  "keywords": "炒币平台app"
+}
+</script>
+</body>
+</html>
